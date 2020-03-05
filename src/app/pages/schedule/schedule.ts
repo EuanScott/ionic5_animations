@@ -6,6 +6,9 @@ import { ScheduleFilterPage } from '../schedule-filter/schedule-filter';
 import { ConferenceData } from '../../providers/conference-data';
 import { UserData } from '../../providers/user-data';
 
+
+import { ModalPage } from '../modal/modal.page';
+
 @Component({
   selector: 'page-schedule',
   templateUrl: 'schedule.html',
@@ -25,7 +28,7 @@ export class SchedulePage implements OnInit {
   confDate: string;
   showSearchbar: boolean;
 
-  constructor(
+  constructor (
     public alertCtrl: AlertController,
     public confData: ConferenceData,
     public loadingCtrl: LoadingController,
@@ -34,16 +37,17 @@ export class SchedulePage implements OnInit {
     public routerOutlet: IonRouterOutlet,
     public toastCtrl: ToastController,
     public user: UserData,
-    public config: Config
+    public config: Config,
+    private modalController: ModalController
   ) { }
 
-  ngOnInit() {
+  ngOnInit () {
     this.updateSchedule();
 
     this.ios = this.config.get('mode') === 'ios';
   }
 
-  updateSchedule() {
+  updateSchedule () {
     // Close any open sliding items when the schedule updates
     if (this.scheduleList) {
       this.scheduleList.closeSlidingItems();
@@ -55,7 +59,7 @@ export class SchedulePage implements OnInit {
     });
   }
 
-  async presentFilter() {
+  async presentFilter () {
     const modal = await this.modalCtrl.create({
       component: ScheduleFilterPage,
       swipeToClose: true,
@@ -71,7 +75,7 @@ export class SchedulePage implements OnInit {
     }
   }
 
-  async addFavorite(slidingItem: HTMLIonItemSlidingElement, sessionData: any) {
+  async addFavorite (slidingItem: HTMLIonItemSlidingElement, sessionData: any) {
     if (this.user.hasFavorite(sessionData.name)) {
       // Prompt to remove favorite
       this.removeFavorite(slidingItem, sessionData, 'Favorite already added');
@@ -97,7 +101,7 @@ export class SchedulePage implements OnInit {
 
   }
 
-  async removeFavorite(slidingItem: HTMLIonItemSlidingElement, sessionData: any, title: string) {
+  async removeFavorite (slidingItem: HTMLIonItemSlidingElement, sessionData: any, title: string) {
     const alert = await this.alertCtrl.create({
       header: title,
       message: 'Would you like to remove this session from your favorites?',
@@ -127,7 +131,7 @@ export class SchedulePage implements OnInit {
     await alert.present();
   }
 
-  async openSocial(network: string, fab: HTMLIonFabElement) {
+  async openSocial (network: string, fab: HTMLIonFabElement) {
     const loading = await this.loadingCtrl.create({
       message: `Posting to ${network}`,
       duration: (Math.random() * 1000) + 500
@@ -135,5 +139,13 @@ export class SchedulePage implements OnInit {
     await loading.present();
     await loading.onWillDismiss();
     fab.close();
+  }
+
+
+  async  openModal () {
+    const modal = await this.modalController.create({
+      component: ModalPage
+    });
+    return await modal.present();
   }
 }

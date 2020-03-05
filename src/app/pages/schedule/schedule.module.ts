@@ -7,6 +7,8 @@ import { SchedulePage } from './schedule';
 import { ScheduleFilterPage } from '../schedule-filter/schedule-filter';
 import { SchedulePageRoutingModule } from './schedule-routing.module';
 
+import { ModalPage } from '../modal/modal.page'
+
 @NgModule({
   imports: [
     CommonModule,
@@ -16,10 +18,12 @@ import { SchedulePageRoutingModule } from './schedule-routing.module';
   ],
   declarations: [
     SchedulePage,
-    ScheduleFilterPage
+    ScheduleFilterPage,
+    ModalPage
   ],
   entryComponents: [
-    ScheduleFilterPage
+    ScheduleFilterPage,
+    ModalPage
   ]
 })
 export class ScheduleModule { }
